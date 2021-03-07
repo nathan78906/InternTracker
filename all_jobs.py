@@ -39,7 +39,7 @@ for link in links_list:
     try:
         response = requests_retry_session().get(link["url"], timeout=10)
     except Exception as x:
-        logger.error("{} : {}".format(x.__class__.__name__, link["url"]))
+        logger.error("{} : {}".format(repr(x), link["url"]))
         continue
 
     if response.status_code != 200:

@@ -34,7 +34,7 @@ for link in links_list:
     try:
         response = requests_retry_session().get(link["url"], timeout=10)
     except Exception as x:
-        logger.error("{} : {}".format(x.__class__.__name__, link["url"]))
+        logger.error("{} : {}".format(repr(x), link["url"]))
         continue
 
     if response.status_code != 200:
@@ -45,7 +45,7 @@ for link in links_list:
         try:
             job = create_job(job, link)
         except Exception as x:
-            logger.error("{} : {}".format(x.__class__.__name__, link["url"]))
+            logger.error("{} : {}".format(repr(x), link["url"]))
             continue
         if job.id not in completed_list and any(x in job.title.lower() for x in filter_words) and not any(x in job.title.lower() for x in blacklist):
             email_list.append("{} - {} ({}): {}".format(link["name"], job.title, job.location, job.url))
@@ -53,7 +53,7 @@ for link in links_list:
                 cursor.execute("INSERT INTO {}(`id`) VALUES('{}')".format(link["type"], job.id))
                 mydb.commit()
             except Exception as x:
-                logger.error("{} : {}, id={}".format(x.__class__.__name__, link["url"], job.id))
+                logger.error("{} : {}, id={}".format(repr(x), link["url"], job.id))
                 continue
 
 cursor.close()

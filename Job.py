@@ -25,7 +25,7 @@ def jobs_response(response, link, logger):
                 partial = requests_retry_session().get("{}?offset={}".format(link["url"], offset), timeout=2)
                 result.extend(partial.json()["content"])
             except Exception as x:
-                logger.error("{} : {}".format(x.__class__.__name__, "{}?offset={}".format(link["url"], offset)))
+                logger.error("{} : {}".format(repr(x), "{}?offset={}".format(link["url"], offset)))
                 continue
         return result
 
